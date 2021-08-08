@@ -9,7 +9,6 @@
 <script>
 
 import store from '@/store/index'
-import shop from '@/api/shop'
 export default {
     computed: {
         products() {
@@ -17,10 +16,12 @@ export default {
         }
     },
     created() {
+        /* that's not the best practice
         shop.getProducts(products => {
             //store.state.products = product //not good because we can't update a state directly without calling a mutation
             store.commit('setProducts', products)
-        })
+        }) */
+        store.dispatch('fetchProducts', 'toys')
     }
 }
 </script>

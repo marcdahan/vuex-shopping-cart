@@ -14,9 +14,19 @@ export default new Vuex.Store({
     }
   },
   actions: {//methods who never update the state
-    fetchProducts () {
-      
-    }
+    fetchProducts (context) {
+      shop.getProducts(products => {
+        //store.state.products = product //not good because we can't update a state directly without calling a mutation
+        context.commit('setProducts', products)
+    })
+    },
+/*  addToCart (context, product) {
+      if (product.inventory > 0) {
+        context.commit('pushProductToCart', product)
+      } else {
+        //show out of stock message
+      }
+    } */
   },
   getters: {// = computed properties
     productsCount () {
