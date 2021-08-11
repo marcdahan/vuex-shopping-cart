@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <ProductList/>
+    <hr>
+    <ShoppingCart/>
   </div>
 </template>
 
 <script>
 import ProductList from './components/ProductList.vue'
-
+import ShoppingCart from './components/ShoppingCart.vue'
 export default {
   name: 'app',
   components: {
-    ProductList
+    ProductList,
+    ShoppingCart,
   }
 }
 </script>
