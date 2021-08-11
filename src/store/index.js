@@ -20,7 +20,8 @@ export default new Vuex.Store({
       })
     },
     incrementItemQuantity (state, cartItem) {
-      cartItem.quantity++
+      let indexItemInCart = state.cart.findIndex(item => item.id == cartItem.id)
+      state.cart[indexItemInCart].quantity++
     },
     decrementProductInventory (state, product) {
       product.inventory--
