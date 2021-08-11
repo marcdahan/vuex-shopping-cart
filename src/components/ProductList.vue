@@ -3,13 +3,17 @@
         <h1>Product List</h1>
         <img v-if="loading" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" >
         <ul v-else >
-            <li v-for="product in products" :key="product.index" >{{product.title}}</li>
+            <li v-for="product in products" :key="product.index" ><span>{{product.title}} / {{product.inventory}} </span>
+                 <button @click="addProductToCart(product)">Add to Cart</button>
+            </li>
+           
         </ul>
     </div>
 </template>
 <script>
 
-import store from '@/store/index'
+// import store from '@/store/index' now injected in main.js to all components 
+// the variable store is now accessible via this.$store
 export default {
     data  () {
         return {
@@ -18,17 +22,23 @@ export default {
     },
     computed: {
         products() {
-            return store.getters.availableProducts
+            //return store.getters.availableProducts
+            return this.$store.getters.availableProducts
+        }
+    },
+    methods: {
+        addProductToCart (product) {
+            this.$store.dispatch('addProductToCart', product)
         }
     },
     created() {
-        /* that's not the best practice
+        /* that's not the best practice 
         shop.getProducts(products => {
             //store.state.products = product //not good because we can't update a state directly without calling a mutation
             store.commit('setProducts', products)
         }) */
         this.loading = true
-        store.dispatch('fetchProducts'/*, 'toys'*/) // dispatch is similar to commit but dedicated to actions
+        this.$store.dispatch('fetchProducts'/*, 'toys'*/) // dispatch is similar to commit but dedicated to actions
             .then(() => this.loading = false)
     }
 }

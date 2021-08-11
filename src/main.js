@@ -7,6 +7,6 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  store,
+  store, //that's a shorthand for store: store
   render: h => h(App)
 })

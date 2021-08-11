@@ -6,11 +6,24 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {//same as data in a vue instance
-    products: []
+    products: [],
+    cart:[]
   },
   mutations: {//responsible of update the state in a single state change
     setProducts (state, products) { //vue x will pass the state in every mutation as first parameter and a payload 
       state.products = products; //here this mutations alter the state
+    },
+    pushProductToCart (state, productId) {
+      state.cart.push({
+        id: productId,
+        quantity: 1
+      })
+    },
+    incrementItemQuantity (state, cartItem) {
+      cartItem.quantity++
+    },
+    decrementProductInventory (state, product) {
+      product.inventory--
     }
   },
   actions: {//methods who never update the state
@@ -23,20 +36,17 @@ export default new Vuex.Store({
         })  
       })
     },
-/*  version without using the ES6 argument destructuring method which need the use of context prefix
-    fetchProducts (context) {
-    shop.getProducts(products => {
-        //store.state.products = product //not good because we can't update a state directly without calling a mutation
-        context.commit('setProducts', products)
-        })
-    }, */
-/*  addToCart (context, product) {
-      if (product.inventory > 0) {
-        context.commit('pushProductToCart', product)
-      } else {
-        //show out of stock message
+    addProductToCart (context, product) {
+      if (product.inventory) {
+        const isItemInCart = context.state.cart.find(item => item.id == product.id)
+        if (!isItemInCart) {
+          context.commit('pushProductToCart', product.id)
+        } else {
+          context.commit('incrementItemQuantity', product)
+        }
+        context.commit('decrementProductInventory', product)
       }
-    } */
+    },
   },
   getters: {// = computed properties
     productsCount () {
