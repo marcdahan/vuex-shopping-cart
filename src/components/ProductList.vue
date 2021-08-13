@@ -22,7 +22,6 @@ export default {
     },
     computed: {
         products() {
-            //return store.getters.availableProducts
             return this.$store.getters.availableProducts
         }
     },
@@ -32,11 +31,6 @@ export default {
         }
     },
     created() {
-        /* that's not the best practice 
-        shop.getProducts(products => {
-            //store.state.products = product //not good because we can't update a state directly without calling a mutation
-            store.commit('setProducts', products)
-        }) */
         this.loading = true
         this.$store.dispatch('fetchProducts'/*, 'toys'*/) // dispatch is similar to commit but dedicated to actions
             .then(() => this.loading = false)

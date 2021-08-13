@@ -7,11 +7,12 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {//same as data in a vue instance
     products: [],
-    cart:[]
+    cart:[],
+    checkOutStatus: "",
   },
-  mutations: {//responsible of update the state in a single state change
-    setProducts (state, products) { //vue x will pass the state in every mutation as first parameter and a payload 
-      state.products = products; //here this mutations alter the state
+  mutations: {
+    setProducts (state, products) {
+      state.products = products;
     },
     pushProductToCart (state, productId) {
       state.cart.push({
@@ -25,6 +26,13 @@ export default new Vuex.Store({
     },
     decrementProductInventory (state, product) {
       product.inventory--
+    },
+    setCheckOutStatus(state, status) {
+      state.checkOutStatus = status
+      console.log("computed:setCheckOutStatus: " + state.checkOutStatus);
+    },
+    emptyCart(state) {
+      state.cart = []
     }
   },
   actions: {//methods who never update the state
@@ -48,6 +56,17 @@ export default new Vuex.Store({
         context.commit('decrementProductInventory', product)
       }
     },
+    checkOut({ state, commit}) {
+      shop.buyProducts(state.cart, 
+        () => {
+          commit('emptyCart')
+          commit('setCheckOutStatus', 'success')
+        },
+        () => {
+          commit('setCheckOutStatus', 'fail')
+        } 
+      )
+    },
   },
   getters: {// = computed properties
     productsCount () {
@@ -65,6 +84,9 @@ export default new Vuex.Store({
           quantity: cartItem.quantity
         }
       })
+    },
+    cartTotal ( state, getters) {
+      return getters.cartProducts.reduce((total, product) => total + product.price * product.quantity, 0)
     }
   },
   modules: {
