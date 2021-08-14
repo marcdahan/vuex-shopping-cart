@@ -1,5 +1,6 @@
 import shop from '@/api/shop'
 export default {
+    namespace: true,
     state: {
         products: [],
     },
@@ -7,7 +8,7 @@ export default {
         availableProducts (state, getters) {
             return state.products
           },
-          productIsInStock () {
+          productIsInStock (product) {
             return (product) => {
               return product.inventory > 0
             }

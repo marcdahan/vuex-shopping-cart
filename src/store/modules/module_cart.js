@@ -1,11 +1,12 @@
 import shop from '@/api/shop'
 export default {
+    namespace: true,
     state: {
         cart:[],
         checkOutStatus: "",
     },
     getters: {
-        cartProducts ( state, getters, rootState) {
+        cartProducts ( state, getters, rootState, rootGetters ) {
             return state.cart.map(cartItem => {
               const product = rootState.module_products.products.find(product => product.id === cartItem.id)
               return {
@@ -39,8 +40,8 @@ export default {
         }
     },
     actions: {
-        addProductToCart ({ state, getters, commit }, product) {
-            if (getters.productIsInStock) {
+        addProductToCart ({ state, getters, commit, rootState, rootGetters }, product) {
+            if (rootGetters.productIsInStock) {
             const isItemInCart = state.cart.find(item => item.id == product.id)
             if (!isItemInCart) {
                 commit('pushProductToCart', product.id)
