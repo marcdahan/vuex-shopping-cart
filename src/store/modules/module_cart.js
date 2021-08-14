@@ -5,9 +5,9 @@ export default {
         checkOutStatus: "",
     },
     getters: {
-        cartProducts ( state ) {
+        cartProducts ( state, getters, rootState) {
             return state.cart.map(cartItem => {
-              const product = state.products.find(product => product.id === cartItem.id)
+              const product = rootState.module_products.products.find(product => product.id === cartItem.id)
               return {
                 title: product.title,
                 price: product.price,
@@ -50,16 +50,16 @@ export default {
                 commit('decrementProductInventory', product)
             }
         },
-        checkOut({ state, commit}) {
-            shop.buyProducts(state.cart,
-                () => {
-                commit('emptyCart')
-                commit('setCheckOutStatus', 'success')
-                },
-                () => {
-                commit('setCheckOutStatus', 'fail')
-                }
-            )
-        },
+            checkOut({ state, commit}) {
+        shop.buyProducts(state.cart,
+            () => {
+            commit('emptyCart')
+            commit('setCheckOutStatus', 'success')
+            },
+            () => {
+            commit('setCheckOutStatus', 'fail')
+            }
+        )
+    },
     }
 }

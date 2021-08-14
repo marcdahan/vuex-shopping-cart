@@ -11,15 +11,13 @@
                     Add to Cart
                 </button>
             </li>
-           
+
         </ul>
     </div>
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 
-// import store from '@/store/index' now injected in main.js to all components 
-// the variable store is now accessible via this.$store
 export default {
     data  () {
         return {
@@ -28,11 +26,11 @@ export default {
     },
     computed: {
         ...mapState({
-            products: state => state.products
+            products: state => state.module_products.products
         }),
-        ...mapGetters({
-            productIsInStock: "productIsInStock"
-        }),
+        ...mapGetters([
+            "productIsInStock"
+        ]),
     },
     methods: {
         ...mapActions([
