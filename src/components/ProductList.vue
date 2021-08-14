@@ -16,6 +16,7 @@
     </div>
 </template>
 <script>
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 // import store from '@/store/index' now injected in main.js to all components 
 // the variable store is now accessible via this.$store
@@ -26,21 +27,22 @@ export default {
         }
     },
     computed: {
-        products () {
-            return this.$store.getters.availableProducts  //this getter allow the productList ccomponent to show only availables products
-        },
-        productIsInStock () {
-            return this.$store.getters.productIsInStock
-        }
+        ...mapState({
+            products: state => state.products
+        }),
+        ...mapGetters({
+            productIsInStock: "productIsInStock"
+        }),
     },
     methods: {
-        addProductToCart (product) {
-            this.$store.dispatch('addProductToCart', product)
-        }
+        ...mapActions([
+            "addProductToCart",
+            "fetchProducts"
+        ])
     },
     created() {
         this.loading = true
-        this.$store.dispatch('fetchProducts'/*, 'toys'*/) // dispatch is similar to commit but dedicated to actions
+        this.fetchProducts()
             .then(() => this.loading = false)
     }
 }
