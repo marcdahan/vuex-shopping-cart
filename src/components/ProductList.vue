@@ -4,7 +4,12 @@
         <img v-if="loading" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" >
         <ul v-else >
             <li v-for="product in products" :key="product.index" ><span>{{product.title}} / {{product.inventory}} </span>
-                 <button @click="addProductToCart(product)">Add to Cart</button>
+                 <button
+                 :disabled="!productIsInStock(product)"
+                 @click="addProductToCart(product)"
+                 >
+                    Add to Cart
+                </button>
             </li>
            
         </ul>
@@ -21,8 +26,11 @@ export default {
         }
     },
     computed: {
-        products() {
-            return this.$store.getters.availableProducts
+        products () {
+            return this.$store.getters.availableProducts  //this getter allow the productList ccomponent to show only availables products
+        },
+        productIsInStock () {
+            return this.$store.getters.productIsInStock
         }
     },
     methods: {
