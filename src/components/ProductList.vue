@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Product List</h1>
-        <img v-if="loading" src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" >
+        <img v-if="loading" src="../assets/giphy.gif" >
         <ul v-else >
             <li v-for="product in products" :key="product.index" ><span>{{product.title}} / {{product.inventory}} </span>
                  <button
@@ -19,24 +19,26 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
-    data  () {
+    data () {
         return {
             loading : false
         }
     },
     computed: {
-        ...mapState({
-            products: state => state.module_products.products
+        ...mapState('module_products', {
+            products: state => state.products
         }),
-        ...mapGetters([
+        ...mapGetters('module_products',[
             "productIsInStock"
         ]),
     },
     methods: {
-        ...mapActions([
+        ...mapActions('module_cart',[
             "addProductToCart",
-            "fetchProducts"
-        ])
+        ]),
+        ...mapActions('module_products',[
+            "fetchProducts",
+        ]),
     },
     created() {
         this.loading = true

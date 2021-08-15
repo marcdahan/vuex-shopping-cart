@@ -1,6 +1,8 @@
 import shop from '@/api/shop'
+import { mapMutations} from 'vuex'
+
 export default {
-    namespace: true,
+    namespaced: true,
     state: {
         cart:[],
         checkOutStatus: "",
@@ -41,26 +43,26 @@ export default {
     },
     actions: {
         addProductToCart ({ state, getters, commit, rootState, rootGetters }, product) {
-            if (rootGetters.productIsInStock) {
-            const isItemInCart = state.cart.find(item => item.id == product.id)
+            if (rootGetters["module_products/productIsInStock"](product)) {
+                const isItemInCart = state.cart.find(item => item.id == product.id)
             if (!isItemInCart) {
                 commit('pushProductToCart', product.id)
             } else {
                 commit('incrementItemQuantity', product)
             }
-                commit('decrementProductInventory', product)
+                commit('module_products/decrementProductInventory', product, {root: true})
             }
         },
-            checkOut({ state, commit}) {
-        shop.buyProducts(state.cart,
-            () => {
-            commit('emptyCart')
-            commit('setCheckOutStatus', 'success')
-            },
-            () => {
-            commit('setCheckOutStatus', 'fail')
-            }
-        )
-    },
+        checkOut({ state, commit}) {
+            shop.buyProducts(state.cart,
+                () => {
+                commit('emptyCart')
+                commit('setCheckOutStatus', 'success')
+                },
+                () => {
+                commit('setCheckOutStatus', 'fail')
+                }
+            )
+        },
     }
 }

@@ -1,6 +1,6 @@
 import shop from '@/api/shop'
 export default {
-    namespace: true,
+    namespaced: true,
     state: {
         products: [],
     },
